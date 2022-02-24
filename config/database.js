@@ -1,10 +1,10 @@
 const pg = require('pg');
 const ssh2 = require('ssh2');
-var pgHost = 'ecometer.crxzobp4e645.ap-south-1.rds.amazonaws.com', // remote hostname/ip
+var pgHost = 'ecometer-dev.cplm2pqxxfjf.ap-south-1.rds.amazonaws.com', // remote hostname/ip
     pgPort = 5432,
     proxyPort = 9090,
     ready = false;
-const privateKey = require('fs').readFileSync(__dirname + '/bhavin2.pem');
+const privateKey = require('fs').readFileSync(__dirname + '/jigyansu');
 
 var client;
 var proxy = require('net').createServer(function(sock) {
@@ -21,7 +21,7 @@ var proxy = require('net').createServer(function(sock) {
   
   var c = new ssh2();
   c.connect({
-    host : 'ec2-3-108-254-16.ap-south-1.compute.amazonaws.com',
+    host : 'ecometer-dev.ceda.ashoka.edu.in',
     port : 22,
     username : 'ubuntu',
     privateKey : privateKey
@@ -31,7 +31,7 @@ var proxy = require('net').createServer(function(sock) {
   });
   c.on('ready', function() {
     ready = true;
-    var conString = 'postgres://postgres:ecometerangular@127.0.0.1:' + proxyPort + '/postgres';
+    var conString = 'postgres://postgres:ecometersuperlord@127.0.0.1:' + proxyPort + '/ecometer';
         client = new pg.Client(conString);
     client.connect(function(err) {
       console.log('Connected !!!!');
