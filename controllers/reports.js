@@ -15,13 +15,14 @@ const getReportData = async (req, res) => {
         }
         const x = response.map(x => x.datetime);
         const y = response.map(x => x.value);
+        const type = response.map(x=> x.fields_json);
         const unit = response[0].unit;
         return res.status(httpStatusCode.OK).send({
             status: true,
             type: 'success',
             message: 'Report data fetched successfully',
             data: {
-                x, y, unit
+                x, y, type, unit
             },
         });
     } catch (error) {
