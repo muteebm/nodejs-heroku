@@ -8,5 +8,6 @@ const reportController = require('../controllers/reports');
 // });
 
 router.get('/getAllData', reportController.getReportData);
+router.post('/getFilteredData', reportController.getFilteredReportData);
 
 module.exports = router;
