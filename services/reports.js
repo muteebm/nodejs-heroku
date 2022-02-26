@@ -20,7 +20,7 @@ const getFilteredReportsData = async (varId, body) => {
             if(body[key].length === 1) {
                 query += ` and fields_json->> '${key}' = '${body[key][0]}'`
             }
-            else {
+            else if(body[key].length !== 0){
                 query +=` and (`
                 body[key].forEach((val, index) => {
                     query += `fields_json->> '${key}' = '${val}'`;
