@@ -13,19 +13,33 @@ const getSectionsAndVariables = async (req, res) => {
             });
         }
         // Parsing the queried response in a better format for frontend to handle easily.
-        let parsedResponse = {};
+        let parsedResponse = [];
+        let prevSectionId = null;
         response.forEach((value) => {
-            if(!parsedResponse[value.section_id]) {
-                parsedResponse[value.section_id] = {name: value.section_name, icon: value.section_icon,
-                     variables: [{id: value.variable_id, name: value.variable_name, icon: value.variable_icon}]}
-            } else {
-                parsedResponse[value.section_id].variables.push({id: value.variable_id, name: value.variable_name, icon: value.variable_icon});
+            if(prevSectionId) {
+                if(value.section_id == prevSectionId) {
+                    parsedResponse[parsedResponse.length-1].children.push(
+                        {title: value.variable_name, icon: value.variable_icon, var_id: value.var_id})
+                }
+                else {
+                    parsedResponse.push({title: value.section_name, icon: value.section_icon, children: [{title: value.variable_name, icon: value.variable_icon, var_id: value.var_id}]})
+                }
             }
+            else {
+                parsedResponse.push({title: value.section_name, icon: value.section_icon, children: [{title: value.variable_name, icon: value.variable_icon, var_id: value.var_id}]})
+            }
+            prevSectionId = value.section_id;
+            // if(!parsedResponse[value.section_id]) {
+            //     parsedResponse[value.section_id] = {name: value.section_name, icon: value.section_icon,
+            //          variables: [{id: value.variable_id, name: value.variable_name, icon: value.variable_icon}]}
+            // } else {
+            //     parsedResponse[value.section_id].variables.push({id: value.variable_id, name: value.variable_name, icon: value.variable_icon});
+            // }
         })
         return res.status(httpStatusCode.OK).send({
             status: true,
             type: 'success',
-            message: 'Report data fetched successfully',
+            message: 'Sections data fetched successfully',
             data: parsedResponse
         });
     } catch (error) {
