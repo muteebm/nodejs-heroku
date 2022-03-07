@@ -46,7 +46,36 @@ const getSectionsAndVariables = async (req, res) => {
     }
 }
 
+const getVariableNotes = async (req, res) => {
+    try {
+        const varId = req.query.varId || null;
+        const response = await reportService.getVariableNotes(varId);
+        if (response && response.length <= 0) {
+            return res.status(httpStatusCode.OK).send({
+                status: true,
+                type: 'success',
+                message: 'No data exist',
+                data: [],
+            });
+        }
+        return res.status(httpStatusCode.OK).send({
+            status: true,
+            type: 'success',
+            message: 'Variable Notes data fetched successfully',
+            data: response[0]
+        });
+    } catch (error) {
+        return res.status(httpStatusCode.INTERNAL_SERVER_ERROR).send({
+            status: false,
+            type: 'error',
+            message: 'Error while fetching data',
+            data: error,
+        });
+    }
+}
+
 
 module.exports = {
-    getSectionsAndVariables
+    getSectionsAndVariables,
+    getVariableNotes
 }
