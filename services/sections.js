@@ -25,7 +25,18 @@ const getVariableNotes = async (varId) => {
     }
 };
 
+const getVariableDetails = async (varId) => {
+    try {
+        const query = `select * from variables.variables where id = ${varId} `
+        const response = await db.query(query);
+        return response.rows;
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = {
     getSectionsAndVariables,
-    getVariableNotes
+    getVariableNotes,
+    getVariableDetails
 };
